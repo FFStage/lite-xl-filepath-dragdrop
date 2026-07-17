@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "addons": [
     {
       "id": "filepath_dragdrop",
@@ -8,4 +9,12 @@
       "description": "Drag a file from the TreeView into a document to insert its path instead of opening it."
     }
   ]
+=======
+  "$schema": "https://raw.githubusercontent.com/lite-xl/lite-xl-plugin-manager/master/schema.json",
+  "id": "filepath_dragdrop",
+  "version": "1.0.0",
+  "description": "Drag a file from the TreeView into a document to insert its path instead of opening it.",
+  "path": "./plugins/filepath_dragdrop.lua",
+  "mod_version": "3"
+>>>>>>> 80316f907f5dd5870c9da01e6e922a5f5ba6cf54
 }
