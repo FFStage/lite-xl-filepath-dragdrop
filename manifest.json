@@ -4,6 +4,5 @@
   "version": "1.0.0",
   "description": "Drag a file from the TreeView into a document to insert its path instead of opening it.",
   "path": "./plugins/filepath_dragdrop.lua",
-  "mod_version": "3",
-  "remote": "https://github.com/FFStage/lite-xl-filepath-dragdrop.git:main"
+  "mod_version": "3"
 }
