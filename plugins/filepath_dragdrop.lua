@@ -7,7 +7,7 @@
 -- While dragging, a small floating label (with the file's tree icon)
 -- follows the pointer showing exactly what will be inserted.
 --
--- https://github.com/<your-username>/filepath-dragdrop
+-- https://github.com/FFStage/lite-xl-filepath-dragdrop
 --
 -- Licensed under the MIT license. See LICENSE for details.
 
@@ -157,17 +157,13 @@ command.add(nil, {
 keymap.add {
   ["escape"] = "filepath-dragdrop:cancel",
 }
-    
+
 
 -- ---------------------------------------------------------------------
 -- Path helpers
 -- ---------------------------------------------------------------------
 
 local function get_project_dir()
-  -- Different Lite XL releases have exposed the project root slightly
-  -- differently (a plain core.project_dir string in most 2.x releases,
-  -- vs. core.root_project() on builds with multi-directory project
-  -- support). Handle both rather than assuming one exists.
   if core.project_dir then
     return core.project_dir
   end
@@ -242,11 +238,6 @@ function dragdrop.insert_path_into_view(view, item)
     selections[#selections + 1] = { idx = idx, l1 = l1, c1 = c1, l2 = l2, c2 = c2 }
   end
 
-  -- Apply insertions from the last cursor to the first. Since document
-  -- positions are stored as line/column pairs (not object references),
-  -- editing at an earlier cursor can shift the coordinates of later ones
-  -- on the same line; going in reverse avoids needing to recompute
-  -- offsets for cursors we've already handled.
   for i = #selections, 1, -1 do
     local sel = selections[i]
 
@@ -276,15 +267,12 @@ function TreeView:on_mouse_pressed(button, x, y, clicks)
   if opts.enabled and button == "left" and self.hovered_item
      and self.hovered_item.type ~= "dir" then
 
-    -- Let the base View handle things like scrollbar interaction first.
     local caught = TreeView.super.on_mouse_pressed(self, button, x, y, clicks)
     if caught then
       drag_state.active = false
       return caught
     end
 
-    -- Defer the "open file" decision to on_mouse_released: we don't yet
-    -- know whether this press will turn into a drag.
     drag_state.active       = true
     drag_state.dragging     = false
     drag_state.item         = self.hovered_item
@@ -298,17 +286,13 @@ function TreeView:on_mouse_pressed(button, x, y, clicks)
     return true
   end
 
-  -- Directories (and clicks while the plugin is disabled) behave exactly
-  -- as before: normal expand/collapse, no drag tracking.
   drag_state.active = false
   return TreeView_on_mouse_pressed(self, button, x, y, clicks)
 end
 
 
 -- ---------------------------------------------------------------------
--- RootView hooks: these see every mouse event regardless of which child
--- view is currently under the pointer, which is required to detect a
--- drop over a DocView after the gesture has left the TreeView's bounds.
+-- RootView hooks
 -- ---------------------------------------------------------------------
 
 local RootView_on_mouse_moved = RootView.on_mouse_moved
@@ -325,8 +309,6 @@ function RootView:on_mouse_moved(x, y, dx, dy, ...)
       if dist >= threshold then
         drag_state.dragging = true
 
-        -- Resolve the preview text and icon once, when the drag begins,
-        -- rather than recomputing them every frame.
         if drag_state.item then
           drag_state.preview_text = dragdrop.compute_path(drag_state.item.abs_filename)
 
@@ -346,7 +328,7 @@ function RootView:on_mouse_moved(x, y, dx, dy, ...)
     end
 
     if drag_state.dragging then
-      core.redraw = true -- keep repainting so the label tracks the cursor
+      core.redraw = true
     end
   end
 end
@@ -372,21 +354,40 @@ function RootView:on_mouse_released(button, x, y, ...)
     drag_state.preview_color = nil
 
     if was_dragging then
-      -- Resolve the drop target from the current pointer position.
       local node = self.root_node:get_child_overlapping_point(x, y)
       local view = node and node.active_view
 
-      if view and view ~= origin_tree and view:is(DocView) then
+      if view and view:is(DocView) then
         dragdrop.insert_path_into_view(view, item)
+
+        elseif view and view == origin_tree then
+                -- NUOVO COMPORTAMENTO: Spostamento file nel TreeView
+                -- Usiamo 'hovered_item' che Lite XL calcola nativamente ogni frame
+                local target_item = view.hovered_item
+
+                if target_item and target_item.type == "dir" then
+                  local old_path = item.abs_filename
+
+                  -- Estraiamo in modo sicuro il nome del file alla fine del percorso
+                  local filename = old_path:match("[^/\\]+$")
+
+                  -- Costruiamo il nuovo percorso assoluto
+                  local new_path = target_item.abs_filename .. "/" .. filename
+
+                  if old_path ~= new_path then
+                    local success, err = os.rename(old_path, new_path)
+                    if success then
+                      core.log("Spostato: %s -> %s", filename, target_item.name or "cartella")
+                      core.rescan_project_directories()
+                    else
+                      core.error("Impossibile spostare il file: %s", err)
+                    end
+                  end
+                end
+
       end
-      -- Dropped somewhere that isn't a document (back on the tree,
-      -- on a tab strip, on the status bar, etc.): the gesture is
-      -- simply cancelled, matching how a failed drag would behave
-      -- in a native application.
 
     else
-      -- No meaningful movement: reproduce the original single-click
-      -- "open file" behavior exactly.
       if item then
         core.try(function()
           local project_dir = get_project_dir()
@@ -435,7 +436,6 @@ function RootView:draw()
 
   local box_w, box_h = content_w + pad_x * 2, th + pad_y * 2
 
-  -- Keep the label on-screen near the right/bottom edges.
   if x + box_w > self.size.x then x = self.size.x - box_w - 4 end
   if y + box_h > self.size.y then y = self.size.y - box_h - 4 end
 
