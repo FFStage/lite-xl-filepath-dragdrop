@@ -189,8 +189,8 @@ all left completely intact.
 - In multi-directory projects, paths are relative to the primary project
   root, not necessarily the specific added directory a file lives under.
 
-~~### One last thing
-This extension is entirely Claude-AI made, I am not proud of the thing at all, but at least it works.
+### ~~One last thing~~
+~~**This extension is entirely Claude-AI made, I am not proud of the thing at all, but at least it works.
 As soon as I can, I'll do extra tests to confirm the overall functionality.~~
 (AI didn't like this part)
 
