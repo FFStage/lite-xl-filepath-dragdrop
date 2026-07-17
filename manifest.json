@@ -1,13 +1,12 @@
-
 {
   "addons": [
     {
-      "id": "/plugins/filepath_dragdrop.lua",
+      "id": "filepath_dragdrop",
       "type": "plugin",
       "version": "1.0.1",
       "mod_version": "3",
       "description": "Drag a file from the TreeView into a document to insert its path instead of opening it.",
-      "path": "filepath_dragdrop.lua"
+      "path": "/plugins/filepath_dragdrop.lua"
     }
   ]
 }
