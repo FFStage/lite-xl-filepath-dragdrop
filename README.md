@@ -48,7 +48,7 @@ my-project/
 ```sh
 mkdir -p ~/.config/lite-xl/plugins
 curl -L -o ~/.config/lite-xl/plugins/filepath_dragdrop.lua \
-  https://raw.githubusercontent.com/<your-username>/filepath-dragdrop/main/filepath_dragdrop.lua
+  https://raw.githubusercontent.com/FFStage/lite-xl-filepath-dragdrop/main/filepath_dragdrop.lua
 ```
 
 **Windows (PowerShell)**
@@ -56,7 +56,7 @@ curl -L -o ~/.config/lite-xl/plugins/filepath_dragdrop.lua \
 ```powershell
 New-Item -ItemType Directory -Force "$env:USERPROFILE\.config\lite-xl\plugins"
 Invoke-WebRequest `
-  -Uri "https://raw.githubusercontent.com/<your-username>/filepath-dragdrop/main/filepath_dragdrop.lua" `
+  -Uri "https://raw.githubusercontent.com/FFStage/lite-xl-filepath-dragdrop/main/filepath_dragdrop.lua" `
   -OutFile "$env:USERPROFILE\.config\lite-xl\plugins\filepath_dragdrop.lua"
 ```
 
@@ -73,7 +73,7 @@ If you maintain this repo with a `manifest.json` entry, users can install it
 with:
 
 ```sh
-lpm add https://github.com/<your-username>/filepath-dragdrop
+lpm add https://github.com/FFStage/lite-xl-filepath-dragdrop
 lpm install filepath_dragdrop
 ```
 
