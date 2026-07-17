@@ -134,20 +134,29 @@ local drag_state = {
   preview_font  = nil,
   preview_color = nil,
 }
-function keymap.on_key_press("escape")
-  if drag_state.active and button == "left" then
-    local item          = drag_state.item
-    local was_dragging   = drag_state.dragging
-    local origin_tree    = drag_state.treeview
+local function cancel_drag()
+  drag_state.active        = false
+  drag_state.dragging      = false
+  drag_state.item          = nil
+  drag_state.treeview      = nil
+  drag_state.preview_text  = nil
+  drag_state.preview_icon  = nil
+  drag_state.preview_font  = nil
+  drag_state.preview_color = nil
+  core.redraw = true
+end
 
-    drag_state.active        = false
-    drag_state.dragging      = false
-    drag_state.item          = nil
-    drag_state.treeview      = nil
-    drag_state.preview_text  = nil
-    drag_state.preview_icon  = nil
-    drag_state.preview_font  = nil
-    drag_state.preview_color = nil
+command.add(nil, {
+  ["filepath-dragdrop:cancel"] = function()
+    if drag_state.active then
+      cancel_drag()
+    end
+  end,
+})
+
+keymap.add {
+  ["escape"] = "filepath-dragdrop:cancel",
+}
     
 
 -- ---------------------------------------------------------------------
