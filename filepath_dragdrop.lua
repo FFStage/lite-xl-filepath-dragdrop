@@ -7,7 +7,7 @@
 -- While dragging, a small floating label (with the file's tree icon)
 -- follows the pointer showing exactly what will be inserted.
 --
--- https://github.com/<your-username>/filepath-dragdrop
+-- https://github.com/FFStage/lite-xl-filepath-dragdrop
 --
 -- Licensed under the MIT license. See LICENSE for details.
 
