@@ -73,7 +73,7 @@ If you maintain this repo with a `manifest.json` entry, users can install it
 with:
 
 ```sh
-lpm add https://github.com/FFStage/lite-xl-filepath-dragdrop
+lpm add https://github.com/FFStage/lite-xl-filepath-dragdrop.git:main
 lpm install filepath_dragdrop
 ```
 
