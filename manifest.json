@@ -1,13 +1,13 @@
+
 {
   "addons": [
     {
       "id": "filepath_dragdrop",
+      "type": "plugin",
       "version": "1.0.0",
       "mod_version": "3",
-      "path": "./filepath_dragdrop.lua",
-      "description": "Drag a file from the TreeView into a document to insert its path instead of opening it."
+      "description": "Drag a file from the TreeView into a document to insert its path instead of opening it.",
+      "path": "filepath_dragdrop.lua"
     }
-  ],
-  "lite-xls": [],
-  "remotes": []
+  ]
 }
