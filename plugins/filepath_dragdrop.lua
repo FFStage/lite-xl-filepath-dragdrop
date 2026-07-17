@@ -19,7 +19,7 @@ local style    = require "core.style"
 local RootView = require "core.rootview"
 local DocView  = require "core.docview"
 local TreeView = require "plugins.treeview"
-local keymap = require "core.keymap"
+local keymap   = require "core.keymap"
 
 -- ---------------------------------------------------------------------
 -- Configuration
@@ -134,7 +134,7 @@ local drag_state = {
   preview_font  = nil,
   preview_color = nil,
 }
-function keymap.on_key_press("\x1B")
+function keymap.on_key_press("escape")
   if drag_state.active and button == "left" then
     local item          = drag_state.item
     local was_dragging   = drag_state.dragging
