@@ -2,7 +2,7 @@
 {
   "addons": [
     {
-      "id": ".\plugins\filepath_dragdrop.lua",
+      "id": "/plugins/filepath_dragdrop.lua",
       "type": "plugin",
       "version": "1.0.1",
       "mod_version": "3",
